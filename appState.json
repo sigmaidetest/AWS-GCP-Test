@@ -1,0 +1,114 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "4aa24af6-259b-4a07-9dfc-e7805568216d": {
+        "id": "4aa24af6-259b-4a07-9dfc-e7805568216d",
+        "parent": null,
+        "name": "AWS-GCP-Test",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "5cee26cb-c1f0-4718-9ad2-48e2cd29c305",
+          "49337381-6db2-421d-807d-006d8c537889"
+        ],
+        "isRemovable": false,
+        "filePath": "AWS-GCP-Test"
+      },
+      "5cee26cb-c1f0-4718-9ad2-48e2cd29c305": {
+        "id": "5cee26cb-c1f0-4718-9ad2-48e2cd29c305",
+        "parent": "4aa24af6-259b-4a07-9dfc-e7805568216d",
+        "name": "lambda.js",
+        "type": "LAMBDA_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "AWS-GCP-Test/lambda.js",
+        "code": "let google = require('googleapis').google;\nlet _auth = require('./Authorizer');\nconst datastore = google.datastore('v1');\n\nexports.handler = function (event, context, callback) {\n\n    datastore.projects.runQuery({\n        projectId: process.env.GCP_PROJECT,\n        resource: {\n            gqlQuery: {\n                queryString: \"wsw\",\n                allowLiterals: true,\n                namedBindings: {\n\n                },\n                positionalBindings: [\n\n                ]\n            }\n        }\n    }).then(response => {\n        console.log(response.data);           // successful response\n        /*\n        response.data = {\n            \"batch\": {\n                \"entityResultType\": \"FULL\",\n                \"endCursor\": \"<base64-encoded>\",\n                \"entityResults\": [\n                    {\n                        \"entity\": {\n                            \"key\": {\n                                \"partitionId\": {\n                                    \"projectId\": \"<project>\"\n                                },\n                                \"path\": [{\n                                        \"kind\": \"<kind>\",\n                                        \"name\": \"<name>\"\n                                    }\n                                ]\n                            },\n                            \"properties\": {\n                                \"<key-1>\": {\n                                    \"<type-1>\": \"<value-1>\"\n                                },\n                                ...\n                            }\n                        },\n                        \"cursor\": \"<cursor>\",\n                        \"version\": \"<version-timestamp>\"\n                    },\n                    ...\n                ]\n            },\n            \"query\": {\n                \"kind\": <kind-spec>,\n                \"filter\": {\n                    \"propertyFilter\": <property-spec; property, op and value>\n                }\n            }\n        }\n        */\n    })\n        .catch(err => {\n            console.log(err, err.stack); // an error occurred\n        });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "triggers": [],
+        "config": {
+          "runtime": "nodejs8.10",
+          "timeout": 60,
+          "memory": 128
+        }
+      },
+      "49337381-6db2-421d-807d-006d8c537889": {
+        "id": "49337381-6db2-421d-807d-006d8c537889",
+        "parent": "4aa24af6-259b-4a07-9dfc-e7805568216d",
+        "name": "Authorizer.js",
+        "type": "JS_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "AWS-GCP-Test/Authorizer.js",
+        "code": "const google = require(\"googleapis\").google;\n\nconst key = JSON.parse(process.env.GCP_SERVICE_ACCOUNT_KEY);\nconst jwtClient = new google.auth.JWT({\n    email: key.client_email,\n    key: key.private_key,\n    scopes: [\"https://www.googleapis.com/auth/cloud-platform\"]\n});\n\ngoogle.options({auth: jwtClient, project: process.env.GCP_PROJECT});",
+        "triggers": []
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "4aa24af6-259b-4a07-9dfc-e7805568216d",
+    "openFiles": [
+      "5cee26cb-c1f0-4718-9ad2-48e2cd29c305"
+    ],
+    "currentFileId": "5cee26cb-c1f0-4718-9ad2-48e2cd29c305",
+    "resources": {
+      "datastore": {
+        "name": "datastore",
+        "type": "datastore",
+        "config": {},
+        "globallyEditable": false
+      }
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      },
+      {
+        "lambdaId": "all",
+        "varKey": "GCP_SERVICE_ACCOUNT_KEY",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      },
+      {
+        "lambdaId": "all",
+        "varKey": "GCP_PROJECT",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "googleapis": {
+          "name": "googleapis",
+          "version": "29.0.0",
+          "notRemovable": false
+        }
+      }
+    },
+    "lambdaId": "5cee26cb-c1f0-4718-9ad2-48e2cd29c305"
+  },
+  "PROJECT_META": {
+    "projectName": "AWS-GCP-Test",
+    "projectDescription": "",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1545976995672
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "AWS-GCP-Test",
+      "url": "https://github.com/sigmaidetest/AWS-GCP-Test"
+    }
+  }
+}
